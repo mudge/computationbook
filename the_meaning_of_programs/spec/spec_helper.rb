@@ -1,3 +1,5 @@
+require "execjs"
+
 RSpec::Matchers.define :look_like do |expected|
   match do |subject|
     actual(subject) == expected
@@ -62,7 +64,7 @@ RSpec::Matchers.define :be_denoted_by do |expected|
   end
 
   def actual(subject)
-    subject.to_ruby
+    subject.to_javascript
   end
 
   failure_message_for_should do |subject|
@@ -76,7 +78,11 @@ RSpec::Matchers.define :mean do |expected|
   end
 
   def actual(subject)
-    eval(subject.to_ruby)[environment]
+    ExecJS.eval("#{subject.to_javascript}(#{javascript_environment})")
+  end
+
+  def javascript_environment
+    "{" + environment.map { |k, v| "#{k.to_s.inspect}: #{v.inspect}" }.join(", ") + "}"
   end
 
   def environment

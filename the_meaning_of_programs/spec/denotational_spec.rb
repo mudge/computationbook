@@ -17,6 +17,10 @@ describe 'the denotational semantics of Simple' do
         it { should be_denoted_by 'function (e) { return e["x"]; }' }
         it { should mean(value).within(environment) }
       end
+
+      context in: :clojure do
+        it { should be_denoted_by '(fn [e] (e "x"))' }
+      end
     end
 
     describe 'a number' do
@@ -30,6 +34,10 @@ describe 'the denotational semantics of Simple' do
       context in: :javascript do
         it { should be_denoted_by 'function (e) { return 42; }' }
         it { should mean 42 }
+      end
+
+      context in: :clojure do
+        it { should be_denoted_by '(fn [e] 42)' }
       end
     end
 
@@ -46,6 +54,10 @@ describe 'the denotational semantics of Simple' do
           it { should be_denoted_by 'function (e) { return true; }' }
           it { should mean true }
         end
+
+        context in: :clojure do
+          it { should be_denoted_by '(fn [e] true)' }
+        end
       end
 
       describe 'false' do
@@ -59,6 +71,10 @@ describe 'the denotational semantics of Simple' do
         context in: :javascript do
           it { should be_denoted_by 'function (e) { return false; }' }
           it { should mean false }
+        end
+
+        context in: :clojure do
+          it { should be_denoted_by '(fn [e] false)' }
         end
       end
     end
@@ -76,6 +92,10 @@ describe 'the denotational semantics of Simple' do
           it { should be_denoted_by 'function (e) { return (function (e) { return 1; }(e)) + (function (e) { return 2; }(e)); }' }
           it { should mean 3 }
         end
+
+        context in: :clojure do
+          it { should be_denoted_by '(fn [e] (+ ((fn [e] 1) e) ((fn [e] 2) e)))' }
+        end
       end
 
       context 'with a reducible subexpression' do
@@ -91,6 +111,10 @@ describe 'the denotational semantics of Simple' do
             it { should be_denoted_by 'function (e) { return (function (e) { return (function (e) { return 1; }(e)) + (function (e) { return 2; }(e)); }(e)) + (function (e) { return 3; }(e)); }' }
             it { should mean 6 }
           end
+
+          context in: :clojure do
+            it { should be_denoted_by '(fn [e] (+ ((fn [e] (+ ((fn [e] 1) e) ((fn [e] 2) e))) e) ((fn [e] 3) e)))' }
+          end
         end
 
         context 'on the right' do
@@ -105,6 +129,10 @@ describe 'the denotational semantics of Simple' do
             it { should be_denoted_by 'function (e) { return (function (e) { return 1; }(e)) + (function (e) { return (function (e) { return 2; }(e)) + (function (e) { return 3; }(e)); }(e)); }' }
             it { should mean 6 }
           end
+
+          context in: :clojure do
+            it { should be_denoted_by '(fn [e] (+ ((fn [e] 1) e) ((fn [e] (+ ((fn [e] 2) e) ((fn [e] 3) e))) e)))' }
+          end
         end
 
         context 'on both sides' do
@@ -118,6 +146,10 @@ describe 'the denotational semantics of Simple' do
           context in: :javascript do
             it { should be_denoted_by 'function (e) { return (function (e) { return (function (e) { return 1; }(e)) + (function (e) { return 2; }(e)); }(e)) + (function (e) { return (function (e) { return 3; }(e)) + (function (e) { return 4; }(e)); }(e)); }' }
             it { should mean 10 }
+          end
+
+          context in: :clojure do
+            it { should be_denoted_by '(fn [e] (+ ((fn [e] (+ ((fn [e] 1) e) ((fn [e] 2) e))) e) ((fn [e] (+ ((fn [e] 3) e) ((fn [e] 4) e))) e)))' }
           end
         end
       end
@@ -136,6 +168,10 @@ describe 'the denotational semantics of Simple' do
           it { should be_denoted_by 'function (e) { return (function (e) { return 2; }(e)) * (function (e) { return 3; }(e)); }' }
           it { should mean 6 }
         end
+
+        context in: :clojure do
+          it { should be_denoted_by '(fn [e] (* ((fn [e] 2) e) ((fn [e] 3) e)))' }
+        end
       end
 
       context 'with a reducible subexpression' do
@@ -151,6 +187,10 @@ describe 'the denotational semantics of Simple' do
             it { should be_denoted_by 'function (e) { return (function (e) { return (function (e) { return 2; }(e)) * (function (e) { return 3; }(e)); }(e)) * (function (e) { return 4; }(e)); }' }
             it { should mean 24 }
           end
+
+          context in: :clojure do
+            it { should be_denoted_by '(fn [e] (* ((fn [e] (* ((fn [e] 2) e) ((fn [e] 3) e))) e) ((fn [e] 4) e)))' }
+          end
         end
 
         context 'on the right' do
@@ -165,6 +205,10 @@ describe 'the denotational semantics of Simple' do
             it { should be_denoted_by 'function (e) { return (function (e) { return 2; }(e)) * (function (e) { return (function (e) { return 3; }(e)) * (function (e) { return 4; }(e)); }(e)); }' }
             it { should mean 24 }
           end
+
+          context in: :clojure do
+            it { should be_denoted_by '(fn [e] (* ((fn [e] 2) e) ((fn [e] (* ((fn [e] 3) e) ((fn [e] 4) e))) e)))' }
+          end
         end
 
         context 'on both sides' do
@@ -178,6 +222,10 @@ describe 'the denotational semantics of Simple' do
           context in: :javascript do
             it { should be_denoted_by 'function (e) { return (function (e) { return (function (e) { return 2; }(e)) * (function (e) { return 3; }(e)); }(e)) * (function (e) { return (function (e) { return 4; }(e)) * (function (e) { return 5; }(e)); }(e)); }' }
             it { should mean 120 }
+          end
+
+          context in: :clojure do
+            it { should be_denoted_by '(fn [e] (* ((fn [e] (* ((fn [e] 2) e) ((fn [e] 3) e))) e) ((fn [e] (* ((fn [e] 4) e) ((fn [e] 5) e))) e)))' }
           end
         end
       end
@@ -196,6 +244,10 @@ describe 'the denotational semantics of Simple' do
           it { should be_denoted_by 'function (e) { return (function (e) { return 1; }(e)) < (function (e) { return 2; }(e)); }' }
           it { should mean true }
         end
+
+        context in: :clojure do
+          it { should be_denoted_by '(fn [e] (< ((fn [e] 1) e) ((fn [e] 2) e)))' }
+        end
       end
 
       context 'with a reducible subexpression' do
@@ -211,6 +263,10 @@ describe 'the denotational semantics of Simple' do
             it { should be_denoted_by 'function (e) { return (function (e) { return (function (e) { return 2; }(e)) + (function (e) { return 3; }(e)); }(e)) < (function (e) { return 4; }(e)); }' }
             it { should mean false }
           end
+
+          context in: :clojure do
+            it { should be_denoted_by '(fn [e] (< ((fn [e] (+ ((fn [e] 2) e) ((fn [e] 3) e))) e) ((fn [e] 4) e)))' }
+          end
         end
 
         context 'on the right' do
@@ -225,6 +281,10 @@ describe 'the denotational semantics of Simple' do
             it { should be_denoted_by 'function (e) { return (function (e) { return 1; }(e)) < (function (e) { return (function (e) { return 2; }(e)) + (function (e) { return 3; }(e)); }(e)); }' }
             it { should mean true }
           end
+
+          context in: :clojure do
+            it { should be_denoted_by '(fn [e] (< ((fn [e] 1) e) ((fn [e] (+ ((fn [e] 2) e) ((fn [e] 3) e))) e)))' }
+          end
         end
 
         context 'on both sides' do
@@ -238,6 +298,10 @@ describe 'the denotational semantics of Simple' do
           context in: :javascript do
             it { should be_denoted_by 'function (e) { return (function (e) { return (function (e) { return 1; }(e)) + (function (e) { return 5; }(e)); }(e)) < (function (e) { return (function (e) { return 2; }(e)) * (function (e) { return 3; }(e)); }(e)); }' }
             it { should mean false }
+          end
+
+          context in: :clojure do
+            it { should be_denoted_by '(fn [e] (< ((fn [e] (+ ((fn [e] 1) e) ((fn [e] 5) e))) e) ((fn [e] (* ((fn [e] 2) e) ((fn [e] 3) e))) e)))' }
           end
         end
       end
@@ -258,6 +322,10 @@ describe 'the denotational semantics of Simple' do
         it { should be_denoted_by 'function (e) { return e; }' }
         it { should mean(environment).within(environment) }
       end
+
+      context in: :clojure do
+        it { should be_denoted_by '(fn [e] e)' }
+      end
     end
 
     describe 'assignment' do
@@ -275,6 +343,10 @@ describe 'the denotational semantics of Simple' do
           it { should be_denoted_by 'function (e) { e["x"] = (function (e) { return 5; }(e)); return e; }' }
           it { should mean(x: 5, y: 2).within(environment) }
         end
+
+        context in: :clojure do
+          it { should be_denoted_by '(fn [e] (assoc e "x" ((fn [e] 5) e)))' }
+        end
       end
 
       context 'with a reducible subexpression' do
@@ -288,6 +360,10 @@ describe 'the denotational semantics of Simple' do
         context in: :javascript do
           it { should be_denoted_by 'function (e) { e["x"] = (function (e) { return (function (e) { return 2; }(e)) + (function (e) { return 3; }(e)); }(e)); return e; }' }
           it { should mean(x: 5, y: 2).within(environment) }
+        end
+
+        context in: :clojure do
+          it { should be_denoted_by '(fn [e] (assoc e "x" ((fn [e] (+ ((fn [e] 2) e) ((fn [e] 3) e))) e)))' }
         end
       end
     end
@@ -307,6 +383,10 @@ describe 'the denotational semantics of Simple' do
           it { should be_denoted_by 'function (e) { return (function (e) { return e; }(function (e) { return e; }(e))); }' }
           it { should mean(environment).within(environment) }
         end
+
+        context in: :clojure do
+          it { should be_denoted_by '(fn [e] ((fn [e] e) ((fn [e] e) e)))' }
+        end
       end
 
       context 'with a reducible substatement' do
@@ -322,6 +402,10 @@ describe 'the denotational semantics of Simple' do
             it { should be_denoted_by 'function (e) { return (function (e) { return e; }(function (e) { e["x"] = (function (e) { return 1; }(e)); return e; }(e))); }' }
             it { should mean(x: 1, y: 3).within(environment) }
           end
+
+          context in: :clojure do
+            it { should be_denoted_by '(fn [e] ((fn [e] e) ((fn [e] (assoc e "x" ((fn [e] 1) e))) e)))' }
+          end
         end
 
         context 'in second position' do
@@ -336,6 +420,10 @@ describe 'the denotational semantics of Simple' do
             it { should be_denoted_by 'function (e) { return (function (e) { e["x"] = (function (e) { return 2; }(e)); return e; }(function (e) { return e; }(e))); }' }
             it { should mean(x: 2, y: 3).within(environment) }
           end
+
+          context in: :clojure do
+            it { should be_denoted_by '(fn [e] ((fn [e] (assoc e "x" ((fn [e] 2) e))) ((fn [e] e) e)))' }
+          end
         end
 
         context 'in both positions' do
@@ -349,6 +437,10 @@ describe 'the denotational semantics of Simple' do
           context in: :javascript do
             it { should be_denoted_by 'function (e) { return (function (e) { e["x"] = (function (e) { return 2; }(e)); return e; }(function (e) { e["x"] = (function (e) { return 1; }(e)); return e; }(e))); }' }
             it { should mean(x: 2, y: 3).within(environment) }
+          end
+
+          context in: :clojure do
+            it { should be_denoted_by '(fn [e] ((fn [e] (assoc e "x" ((fn [e] 2) e))) ((fn [e] (assoc e "x" ((fn [e] 1) e))) e)))' }
           end
         end
       end
@@ -369,6 +461,10 @@ describe 'the denotational semantics of Simple' do
           it { should be_denoted_by 'function (e) { if (function (e) { return false; }(e)) { return (function (e) { e["x"] = (function (e) { return 3; }(e)); return e; }(e)); } else { return (function (e) { e["y"] = (function (e) { return 3; }(e)); return e; }(e)); } }' }
           it { should mean(x: 1, y: 3).within(environment) }
         end
+
+        context in: :clojure do
+          it { should be_denoted_by '(fn [e] (if ((fn [e] false) e) ((fn [e] (assoc e "x" ((fn [e] 3) e))) e) ((fn [e] (assoc e "y" ((fn [e] 3) e))) e)))' }
+        end
       end
 
       context 'with a reducible subexpression' do
@@ -382,6 +478,10 @@ describe 'the denotational semantics of Simple' do
         context in: :javascript do
           it { should be_denoted_by 'function (e) { if (function (e) { return (function (e) { return 3; }(e)) < (function (e) { return 4; }(e)); }(e)) { return (function (e) { e["x"] = (function (e) { return 3; }(e)); return e; }(e)); } else { return (function (e) { e["y"] = (function (e) { return 3; }(e)); return e; }(e)); } }' }
           it { should mean(x: 3, y: 2).within(environment) }
+        end
+
+        context in: :clojure do
+          it { should be_denoted_by '(fn [e] (if ((fn [e] (< ((fn [e] 3) e) ((fn [e] 4) e))) e) ((fn [e] (assoc e "x" ((fn [e] 3) e))) e) ((fn [e] (assoc e "y" ((fn [e] 3) e))) e)))' }
         end
       end
     end
@@ -398,6 +498,10 @@ describe 'the denotational semantics of Simple' do
       context in: :javascript do
         it { should be_denoted_by 'function (e) { while (function (e) { return (function (e) { return e["x"]; }(e)) < (function (e) { return 5; }(e)); }(e)) { e = (function (e) { e["x"] = (function (e) { return (function (e) { return e["x"]; }(e)) * (function (e) { return 3; }(e)); }(e)); return e; }(e)); } return e; }' }
         it { should mean(x: 9).within(environment) }
+      end
+
+      context in: :clojure do
+        it { should be_denoted_by '(fn [e] (if ((fn [e] (< ((fn [e] (e "x")) e) ((fn [e] 5) e))) e) (recur ((fn [e] (assoc e "x" ((fn [e] (* ((fn [e] (e "x")) e) ((fn [e] 3) e))) e))) e)) e))' }
       end
     end
   end

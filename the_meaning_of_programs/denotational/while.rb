@@ -14,4 +14,8 @@ class While
       " return e;" +
       " }"
   end
+
+  def to_clojure
+    "(fn [e] (if (#{condition.to_clojure} e) (recur (#{body.to_clojure} e)) e))"
+  end
 end

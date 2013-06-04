@@ -9,4 +9,8 @@ class Boolean
   def to_javascript
     "function (e) { return #{ExecJS::JSON.encode(value)}; }"
   end
+
+  def to_clojure
+    "(fn [e] #{value.inspect})"
+  end
 end

@@ -8,4 +8,8 @@ class Sequence
   def to_javascript
     "function (e) { return (#{second.to_javascript}(#{first.to_javascript}(e))); }"
   end
+
+  def to_clojure
+    "(fn [e] (#{second.to_clojure} (#{first.to_clojure} e)))"
+  end
 end

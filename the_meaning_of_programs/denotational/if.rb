@@ -14,4 +14,8 @@ class If
       " else { return (#{alternative.to_javascript}(e)); }" +
       " }"
   end
+
+  def to_clojure
+    "(fn [e] (if (#{condition.to_clojure} e) (#{consequence.to_clojure} e) (#{alternative.to_clojure} e)))"
+  end
 end

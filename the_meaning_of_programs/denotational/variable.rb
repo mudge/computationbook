@@ -9,4 +9,8 @@ class Variable
   def to_javascript
     "function (e) { return e[#{ExecJS::JSON.encode(name)}]; }"
   end
+
+  def to_clojure
+    "(fn [e] (e #{name.to_s.inspect}))"
+  end
 end

@@ -9,4 +9,8 @@ class Assign
   def to_javascript
     "function (e) { e[#{ExecJS::JSON.encode(name)}] = (#{expression.to_javascript}(e)); return e; }"
   end
+
+  def to_clojure
+    "(fn [e] (assoc e #{name.to_s.inspect} (#{expression.to_clojure} e)))"
+  end
 end

@@ -8,4 +8,8 @@ class DoNothing
   def to_javascript
     'function (e) { return e; }'
   end
+
+  def to_clojure
+    "(fn [e] e)"
+  end
 end

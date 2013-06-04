@@ -19,7 +19,7 @@ describe 'the denotational semantics of Simple' do
       end
 
       context in: :clojure do
-        it { should be_denoted_by '(fn [e] (e "x"))' }
+        it { should be_denoted_by '(fn [e] (e :x))' }
         it { should mean(value).within(environment) }
       end
     end
@@ -39,6 +39,7 @@ describe 'the denotational semantics of Simple' do
 
       context in: :clojure do
         it { should be_denoted_by '(fn [e] 42)' }
+        it { should mean 42 }
       end
     end
 
@@ -58,6 +59,7 @@ describe 'the denotational semantics of Simple' do
 
         context in: :clojure do
           it { should be_denoted_by '(fn [e] true)' }
+          it { should mean true }
         end
       end
 
@@ -76,6 +78,7 @@ describe 'the denotational semantics of Simple' do
 
         context in: :clojure do
           it { should be_denoted_by '(fn [e] false)' }
+          it { should mean false }
         end
       end
     end
@@ -325,7 +328,7 @@ describe 'the denotational semantics of Simple' do
       end
 
       context in: :clojure do
-        it { should be_denoted_by '(fn [e] e)' }
+        it { should be_denoted_by 'identity' }
       end
     end
 
@@ -346,7 +349,7 @@ describe 'the denotational semantics of Simple' do
         end
 
         context in: :clojure do
-          it { should be_denoted_by '(fn [e] (assoc e "x" ((fn [e] 5) e)))' }
+          it { should be_denoted_by '(fn [e] (assoc e :x ((fn [e] 5) e)))' }
         end
       end
 
@@ -364,7 +367,7 @@ describe 'the denotational semantics of Simple' do
         end
 
         context in: :clojure do
-          it { should be_denoted_by '(fn [e] (assoc e "x" ((fn [e] (+ ((fn [e] 2) e) ((fn [e] 3) e))) e)))' }
+          it { should be_denoted_by '(fn [e] (assoc e :x ((fn [e] (+ ((fn [e] 2) e) ((fn [e] 3) e))) e)))' }
         end
       end
     end
@@ -386,7 +389,7 @@ describe 'the denotational semantics of Simple' do
         end
 
         context in: :clojure do
-          it { should be_denoted_by '(fn [e] ((fn [e] e) ((fn [e] e) e)))' }
+          it { should be_denoted_by '(fn [e] (identity (identity e)))' }
         end
       end
 
@@ -405,7 +408,7 @@ describe 'the denotational semantics of Simple' do
           end
 
           context in: :clojure do
-            it { should be_denoted_by '(fn [e] ((fn [e] e) ((fn [e] (assoc e "x" ((fn [e] 1) e))) e)))' }
+            it { should be_denoted_by '(fn [e] (identity ((fn [e] (assoc e :x ((fn [e] 1) e))) e)))' }
           end
         end
 
@@ -423,7 +426,7 @@ describe 'the denotational semantics of Simple' do
           end
 
           context in: :clojure do
-            it { should be_denoted_by '(fn [e] ((fn [e] (assoc e "x" ((fn [e] 2) e))) ((fn [e] e) e)))' }
+            it { should be_denoted_by '(fn [e] ((fn [e] (assoc e :x ((fn [e] 2) e))) (identity e)))' }
           end
         end
 
@@ -441,7 +444,7 @@ describe 'the denotational semantics of Simple' do
           end
 
           context in: :clojure do
-            it { should be_denoted_by '(fn [e] ((fn [e] (assoc e "x" ((fn [e] 2) e))) ((fn [e] (assoc e "x" ((fn [e] 1) e))) e)))' }
+            it { should be_denoted_by '(fn [e] ((fn [e] (assoc e :x ((fn [e] 2) e))) ((fn [e] (assoc e :x ((fn [e] 1) e))) e)))' }
           end
         end
       end
@@ -464,7 +467,7 @@ describe 'the denotational semantics of Simple' do
         end
 
         context in: :clojure do
-          it { should be_denoted_by '(fn [e] (if ((fn [e] false) e) ((fn [e] (assoc e "x" ((fn [e] 3) e))) e) ((fn [e] (assoc e "y" ((fn [e] 3) e))) e)))' }
+          it { should be_denoted_by '(fn [e] (if ((fn [e] false) e) ((fn [e] (assoc e :x ((fn [e] 3) e))) e) ((fn [e] (assoc e :y ((fn [e] 3) e))) e)))' }
         end
       end
 
@@ -482,7 +485,7 @@ describe 'the denotational semantics of Simple' do
         end
 
         context in: :clojure do
-          it { should be_denoted_by '(fn [e] (if ((fn [e] (< ((fn [e] 3) e) ((fn [e] 4) e))) e) ((fn [e] (assoc e "x" ((fn [e] 3) e))) e) ((fn [e] (assoc e "y" ((fn [e] 3) e))) e)))' }
+          it { should be_denoted_by '(fn [e] (if ((fn [e] (< ((fn [e] 3) e) ((fn [e] 4) e))) e) ((fn [e] (assoc e :x ((fn [e] 3) e))) e) ((fn [e] (assoc e :y ((fn [e] 3) e))) e)))' }
         end
       end
     end
@@ -502,7 +505,7 @@ describe 'the denotational semantics of Simple' do
       end
 
       context in: :clojure do
-        it { should be_denoted_by '(fn [e] (if ((fn [e] (< ((fn [e] (e "x")) e) ((fn [e] 5) e))) e) (recur ((fn [e] (assoc e "x" ((fn [e] (* ((fn [e] (e "x")) e) ((fn [e] 3) e))) e))) e)) e))' }
+        it { should be_denoted_by '(fn [e] (if ((fn [e] (< ((fn [e] (e :x)) e) ((fn [e] 5) e))) e) (recur ((fn [e] (assoc e :x ((fn [e] (* ((fn [e] (e :x)) e) ((fn [e] 3) e))) e))) e)) e))' }
       end
     end
   end

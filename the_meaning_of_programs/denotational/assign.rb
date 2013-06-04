@@ -11,6 +11,6 @@ class Assign
   end
 
   def to_clojure
-    "(fn [e] (assoc e #{name.to_s.inspect} (#{expression.to_clojure} e)))"
+    "(fn [e] (assoc e #{name.inspect} (#{expression.to_clojure} e)))"
   end
 end

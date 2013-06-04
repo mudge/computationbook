@@ -11,6 +11,6 @@ class Variable
   end
 
   def to_clojure
-    "(fn [e] (e #{name.to_s.inspect}))"
+    "(fn [e] (e #{name.inspect}))"
   end
 end

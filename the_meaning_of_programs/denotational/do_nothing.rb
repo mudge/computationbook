@@ -10,6 +10,6 @@ class DoNothing
   end
 
   def to_clojure
-    "(fn [e] e)"
+    "identity"
   end
 end

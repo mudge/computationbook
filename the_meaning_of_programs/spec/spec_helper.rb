@@ -1,6 +1,14 @@
 require 'execjs'
 require 'rouge'
 
+def clojure_eval(form)
+  context = Rouge::Context.new(Rouge[:computationbook].refer(Rouge[:"rouge.builtin"]))
+  form = context.ns.read(form)
+  form = Rouge::Compiler.compile(context.ns, Set[*context.lexical_keys], form)
+
+  context.eval(form)
+end
+
 RSpec::Matchers.define :look_like do |expected|
   match do |subject|
     actual(subject) == expected
@@ -89,11 +97,7 @@ RSpec::Matchers.define :mean do |expected|
     when :javascript
       ExecJS.eval("#{subject.to_javascript}(#{ExecJS::JSON.encode(environment)})")
     when :clojure
-      context = Rouge::Context.new(Rouge[:computationbook].refer(Rouge[:"rouge.builtin"]))
-      form = context.ns.read("(#{subject.to_clojure} #{Rouge.print(environment, "")})")
-      form = Rouge::Compiler.compile(context.ns, Set[*context.lexical_keys], form)
-
-      context.eval(form)
+      clojure_eval("(#{subject.to_clojure} #{Rouge.print(environment, "")})")
     end
   end
 
@@ -111,6 +115,8 @@ RSpec::Matchers.define :mean do |expected|
       expected
     when :javascript
       ExecJS::JSON.decode(ExecJS::JSON.encode(expected))
+    when :clojure
+      clojure_eval(Rouge.print(expected, ""))
     end
   end
 

@@ -6,6 +6,7 @@ GEM
       multi_json (~> 1.0)
     multi_json (1.6.1)
     polyglot (0.3.3)
+    rouge-lang (0.0.14)
     rspec (2.13.0)
       rspec-core (~> 2.13.0)
       rspec-expectations (~> 2.13.0)
@@ -23,5 +24,6 @@ PLATFORMS
 
 DEPENDENCIES
   execjs
+  rouge-lang
   rspec
   treetop

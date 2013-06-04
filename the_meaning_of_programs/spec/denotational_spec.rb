@@ -20,6 +20,7 @@ describe 'the denotational semantics of Simple' do
 
       context in: :clojure do
         it { should be_denoted_by '(fn [e] (e "x"))' }
+        it { should mean(value).within(environment) }
       end
     end
 

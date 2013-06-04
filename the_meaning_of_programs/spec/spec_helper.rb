@@ -1,4 +1,5 @@
 require "execjs"
+require "execjs/json"
 
 RSpec::Matchers.define :look_like do |expected|
   match do |subject|
@@ -78,11 +79,7 @@ RSpec::Matchers.define :mean do |expected|
   end
 
   def actual(subject)
-    ExecJS.eval("#{subject.to_javascript}(#{javascript_environment})")
-  end
-
-  def javascript_environment
-    "{" + environment.map { |k, v| "#{k.to_s.inspect}: #{v.inspect}" }.join(", ") + "}"
+    ExecJS.eval("#{subject.to_javascript}(#{ExecJS::JSON.encode(environment)})")
   end
 
   def environment

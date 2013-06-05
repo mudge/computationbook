@@ -99,6 +99,7 @@ describe 'the denotational semantics of Simple' do
 
         context in: :clojure do
           it { should be_denoted_by '(fn [e] (+ ((fn [e] 1) e) ((fn [e] 2) e)))' }
+          it { should mean 3 }
         end
       end
 
@@ -118,6 +119,7 @@ describe 'the denotational semantics of Simple' do
 
           context in: :clojure do
             it { should be_denoted_by '(fn [e] (+ ((fn [e] (+ ((fn [e] 1) e) ((fn [e] 2) e))) e) ((fn [e] 3) e)))' }
+            it { should mean 6 }
           end
         end
 
@@ -136,6 +138,7 @@ describe 'the denotational semantics of Simple' do
 
           context in: :clojure do
             it { should be_denoted_by '(fn [e] (+ ((fn [e] 1) e) ((fn [e] (+ ((fn [e] 2) e) ((fn [e] 3) e))) e)))' }
+            it { should mean 6 }
           end
         end
 
@@ -154,6 +157,7 @@ describe 'the denotational semantics of Simple' do
 
           context in: :clojure do
             it { should be_denoted_by '(fn [e] (+ ((fn [e] (+ ((fn [e] 1) e) ((fn [e] 2) e))) e) ((fn [e] (+ ((fn [e] 3) e) ((fn [e] 4) e))) e)))' }
+            it { should mean 10 }
           end
         end
       end
@@ -175,6 +179,7 @@ describe 'the denotational semantics of Simple' do
 
         context in: :clojure do
           it { should be_denoted_by '(fn [e] (* ((fn [e] 2) e) ((fn [e] 3) e)))' }
+          it { should mean 6 }
         end
       end
 
@@ -194,6 +199,7 @@ describe 'the denotational semantics of Simple' do
 
           context in: :clojure do
             it { should be_denoted_by '(fn [e] (* ((fn [e] (* ((fn [e] 2) e) ((fn [e] 3) e))) e) ((fn [e] 4) e)))' }
+            it { should mean 24 }
           end
         end
 
@@ -212,6 +218,7 @@ describe 'the denotational semantics of Simple' do
 
           context in: :clojure do
             it { should be_denoted_by '(fn [e] (* ((fn [e] 2) e) ((fn [e] (* ((fn [e] 3) e) ((fn [e] 4) e))) e)))' }
+            it { should mean 24 }
           end
         end
 
@@ -230,6 +237,7 @@ describe 'the denotational semantics of Simple' do
 
           context in: :clojure do
             it { should be_denoted_by '(fn [e] (* ((fn [e] (* ((fn [e] 2) e) ((fn [e] 3) e))) e) ((fn [e] (* ((fn [e] 4) e) ((fn [e] 5) e))) e)))' }
+            it { should mean 120 }
           end
         end
       end
@@ -251,6 +259,7 @@ describe 'the denotational semantics of Simple' do
 
         context in: :clojure do
           it { should be_denoted_by '(fn [e] (< ((fn [e] 1) e) ((fn [e] 2) e)))' }
+          it { should mean true }
         end
       end
 
@@ -270,6 +279,7 @@ describe 'the denotational semantics of Simple' do
 
           context in: :clojure do
             it { should be_denoted_by '(fn [e] (< ((fn [e] (+ ((fn [e] 2) e) ((fn [e] 3) e))) e) ((fn [e] 4) e)))' }
+            it { should mean false }
           end
         end
 
@@ -288,6 +298,7 @@ describe 'the denotational semantics of Simple' do
 
           context in: :clojure do
             it { should be_denoted_by '(fn [e] (< ((fn [e] 1) e) ((fn [e] (+ ((fn [e] 2) e) ((fn [e] 3) e))) e)))' }
+            it { should mean true }
           end
         end
 
@@ -306,6 +317,7 @@ describe 'the denotational semantics of Simple' do
 
           context in: :clojure do
             it { should be_denoted_by '(fn [e] (< ((fn [e] (+ ((fn [e] 1) e) ((fn [e] 5) e))) e) ((fn [e] (* ((fn [e] 2) e) ((fn [e] 3) e))) e)))' }
+            it { should mean false }
           end
         end
       end
